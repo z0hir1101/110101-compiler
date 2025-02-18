@@ -1,0 +1,7 @@
+int number: 5;
+
+int   number :5;
+
+int  number  :   5;
+
+int number:5;
