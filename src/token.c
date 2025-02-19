@@ -1,4 +1,5 @@
 #include "include/token.h"
+#include <stdlib.h>
 
 token_T* init_token(char* value, int type)
 {

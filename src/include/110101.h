@@ -1,4 +1,4 @@
-#ifndef _1011_H 
-#define _1011_H
+#ifndef _110101_H 
+#define _110101_H
 void compile(char* src);
 #endif

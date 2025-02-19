@@ -1,4 +1,4 @@
-#include  "include/lexer.h"
+#include "include/lexer.h"
 #include "include/macros.h"
 #include  <ctype.h>
 #include <string.h>
@@ -44,9 +44,9 @@ token_T* lexer_parse_idt(lexer_T* lexer)
 
 token_T* lexer_parse_lit(lexer_T* lexer)
 {
-    char* value = calloc(1, sizeof(char));
+  char* value = calloc(1, sizeof(char));
 
-    while (isalpha(lexer->c)) {
+  while (isalpha(lexer->c)) {
     value = realloc(value, (strlen(value) + 2) * sizeof(char));
     strcat(value, (char[]){lexer->c, 0});
     lexer_advance(lexer);
@@ -57,12 +57,12 @@ token_T* lexer_parse_lit(lexer_T* lexer)
 
 char lexer_peek(lexer_T* lexer, int offset)
 {
-  return lexer->src[MIN(lexer->i+offset, lexer->src_size)];
+  return lexer->src[MIN(lexer->i + offset, lexer->src_size)];
 }
 
 void lexer_skip_whitespace(lexer_T* lexer)
 {
-  while (isspace(lexer->c))
+  while (lexer->c == ' ' || lexer->c == '\t')
     lexer_advance(lexer);
 }
 
@@ -70,15 +70,20 @@ token_T* lexer_next_token(lexer_T* lexer)
 {
   lexer_skip_whitespace(lexer);
 
-  if (lexer->c == EOF)
+  if (lexer->c == EOF || lexer->c == '\n')
     return init_token(0, TOKEN_EOF);
 
   if (isalpha(lexer->c))
-    return lexer_advance_with(lexer, lexer_parse_idt(lexer));
+    return lexer_parse_lit(lexer);
   if (isdigit(lexer->c))
-    return lexer_advance_with(lexer, lexer_parse_lit(lexer));
+    return lexer_parse_idt(lexer);
 
   switch (lexer->c) {
+  case '=': {
+    if (lexer_peek(lexer, 1) == '>')
+      return lexer_advance_with(lexer, init_token("=>", TOKEN_OPT));
+    return lexer_advance_with(lexer, init_token("=", TOKEN_OPT));
+  }
   case ':': return lexer_advance_with(lexer, init_token(":", TOKEN_OPT));
   case '+': return lexer_advance_with(lexer, init_token("+", TOKEN_OPT));
   case '-': return lexer_advance_with(lexer, init_token("-", TOKEN_OPT));
@@ -91,6 +96,5 @@ token_T* lexer_next_token(lexer_T* lexer)
   default: 
     printf("lexer.c: unexpected token '%c'\n", lexer->c);
     exit(1);
-    break;
   }
 }
