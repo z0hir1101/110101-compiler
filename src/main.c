@@ -1,6 +1,6 @@
 #include "include/110101.h"
 #include "include/io.h"
-#include  <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[])
