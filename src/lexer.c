@@ -6,7 +6,7 @@
 
 lexer_T* init_lexer(char* src)
 {
-  lexer_T* lexer = malloc(sizeof(struct LEXER_STRUCT));
+  lexer_T* lexer = malloc(sizeof(lexer_T));
   lexer->src = src;
   lexer->src_size = strlen(src);
   lexer->i = 0;
@@ -53,8 +53,10 @@ token_T* lexer_parse(lexer_T* lexer)
   if (!strcmp(value, "return"))
     return init_token(value, TOKEN_KEYW_RETURN);
   if (isdigit(*value))
-    return init_token(value, TOKEN_LIT);
-  return init_token(value, TOKEN_IDT);
+    return init_token(value, TOKEN_LITERAL_INT);
+  if (*value == '"')
+    return init_token(value, TOKEN_LITERAL_STR);
+  return init_token(value, TOKEN_ID);
 }
 
 char lexer_peek(lexer_T* lexer, int offset)

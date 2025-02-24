@@ -3,6 +3,10 @@
 typedef struct TOKEN_STRUCT {
   char* value;
   enum {
+    TOKEN_EOF,
+    TOKEN_LITERAL_STR,
+    TOKEN_LITERAL_INT,
+    TOKEN_ID,
     TOKEN_KEYW_TYPE,
     TOKEN_KEYW_STAT,
     TOKEN_KEYW_LOOP,
@@ -17,10 +21,6 @@ typedef struct TOKEN_STRUCT {
     TOKEN_OPRT_LAMBDA,
     TOKEN_OPRT_EQUALS,
     TOKEN_OPRT_COMPAR,
-    TOKEN_COMMENTS,
-    TOKEN_IDT,
-    TOKEN_LIT,
-    TOKEN_EOF,
   } type;
 } token_T;
 

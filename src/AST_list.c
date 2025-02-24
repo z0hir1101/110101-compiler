@@ -3,7 +3,7 @@
 
 list_T* init_list(size_t item_size)
 {
-  list_T* list = malloc(sizeof(struct LIST_STRUCT));
+  list_T* list = malloc(sizeof(list_T));
   list->item_size = item_size;
   list->size = 0;
   list->items = 0;
