@@ -47,9 +47,8 @@ node_T* parse_var_declr(parser_T* parser)
   token_T* token_litr = parser_eat(parser, TOKEN_LITERAL_INT);
   parser_eat(parser, TOKEN_PUNC_SEMI); 
 
-  node_var->children = init_list(sizeof(node_T));
-  push_item(node_var->children, init_node(NODE_IDENTIFIRE, token_idnt)); 
-  push_item(node_var->children, init_node(NODE_LITERAL, token_litr)); 
+  push_node(node_var, init_node(NODE_IDENTIFIRE, token_idnt)); 
+  push_node(node_var, init_node(NODE_LITERAL, token_litr)); 
   
   return node_var;
 }
@@ -62,17 +61,15 @@ node_T* parse_func_call(parser_T* parser)
   parser_advance(parser);
 
   node_T* node_args = init_node(NODE_ARGUMENTS, NULL);
-  node_args->children = init_list(sizeof(node_T));
-  push_item(node_args->children, parse_expr(parser));
+  push_node(node_args, parse_exprasion(parser));
   parser_eat(parser, TOKEN_PUNC_SEMI);
 
-  node_func->children = init_list(sizeof(node_T));
-  push_item(node_func->children, node_args); 
+  push_node(node_func, node_args); 
   
   return node_func;
 }
 
-node_T* parse_expr(parser_T* parser)
+node_T* parse_exprasion(parser_T* parser)
 {
   token_T* token = parser->token;
   parser_advance(parser);
@@ -83,9 +80,8 @@ node_T* parse_expr(parser_T* parser)
     return init_node(NODE_IDENTIFIRE, token);
   if (token->type == TOKEN_OPRT_ARITH) {
     node_T* oprt = init_node(NODE_OPERATOR, token);
-    oprt->children = init_list(sizeof(node_T));
-    push_item(oprt->children, parse_expr(parser));
-    push_item(oprt->children, parse_expr(parser));
+    push_node(oprt, parse_exprasion(parser));
+    push_node(oprt, parse_exprasion(parser));
     return oprt;
   }
   printf("parser.c [parser_expr]: unexpected token %d\n", token->type);

@@ -1,7 +1,7 @@
 #ifndef AST_NODE_H
 #define AST_NODE_H
-#include "AST_list.h"
 #include "token.h"
+#include "stdio.h"
 typedef struct NODE_STRUCT {
   enum {
     NODE_ARGUMENTS,
@@ -14,10 +14,12 @@ typedef struct NODE_STRUCT {
     NODE_OPERATOR,
     NODE_ROOT,
   } type;
-
   token_T* value;
-  list_T* children;
+
+  struct NODE_STRUCT** node_list;
+  size_t size;
 } node_T;
 
 node_T* init_node(int type, token_T* value);
+void push_node(node_T* root, node_T* node);
 #endif

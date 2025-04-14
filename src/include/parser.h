@@ -14,5 +14,5 @@ token_T* parser_advance(parser_T* parser);
 node_T* parser_parse(parser_T* parser);
 node_T* parse_var_declr(parser_T* parser);
 node_T* parse_func_call(parser_T* parser);
-node_T* parse_expr(parser_T* parser);
+node_T* parse_exprasion(parser_T* parser);
 #endif

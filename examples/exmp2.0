@@ -2,4 +2,3 @@ int num1: 5;
 int num2: 3;
 
 return(+ num1 num2);
-return(+ - 5 1 6);

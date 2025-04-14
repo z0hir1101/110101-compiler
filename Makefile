@@ -14,6 +14,8 @@ clean:
 	-rm *.o
 	-rm *.a
 	-rm src/*.o
+	-rm examples/*.o
+	-rm examples/*.out
 
 lint:
 	clang-tidy src/*.c src/include/*.h
