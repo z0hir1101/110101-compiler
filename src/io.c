@@ -12,7 +12,7 @@ char* read_file(const char* file)
 
   fp = fopen(file, "rb");
   if (fp == NULL) {
-    printf("io.c: cannot read file '%s'\n", file);
+    printf("io.c [read_file]: cannot read file '%s'\n", file);
     exit(1);
   }
 
@@ -28,4 +28,19 @@ char* read_file(const char* file)
     free(line);
 
   return buffer;
+}
+
+void write_file(const char* file_name, char* outbuffer)
+{
+  FILE* fp;
+
+  fp = fopen(file_name, "wb");
+  if (fp == NULL) {
+    printf("io.c [write_file]: cannot open file '%s'\n", file_name);
+    exit(1);
+  }
+
+  fprintf(fp, outbuffer);
+
+  fclose(fp);
 }

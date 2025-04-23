@@ -60,7 +60,29 @@ char* asm_node(node_T* node)
 
 char* asm_var_declr(node_T* node)
 {
-  return NULL;
+  if (node->type != NODE_VARIABLE_DEF) {
+    printf("asm.c [asm_var_declr]: unexpected node %d\n", node->type);
+    exit(1);
+  }
+
+  char* s = calloc(1, sizeof(char));
+  char* arg1 = NULL;
+  char* arg2 = NULL;
+  int i = 0;
+  
+  if (node->items[i]->token->type == TOKEN_ID) {
+    const char* template = "%s dd %s\n";
+
+    arg1 = node->size ? node->items[i++]->token->value : NULL;
+    arg2 = node->size - 1 ? node->items[i++]->token->value : NULL;
+
+    char* tmp_s = calloc(strlen(template) + 128, sizeof(char));
+    sprintf(tmp_s, template, arg1, arg2);
+    s = realloc(s, (strlen(tmp_s) + 1) * sizeof(char));
+    strcat(s, tmp_s); 
+  }
+  
+  return s;
 }
 
 char* asm_func_call(node_T* node)
@@ -72,13 +94,20 @@ char* asm_func_call(node_T* node)
 
   char* s = calloc(1, sizeof(char));
   char* arg = NULL;
-  node_T* args = node->items[0];
+  node_T* curr_node = node->items[0];
   
   if (node->token->type == TOKEN_KEYW_RETURN) {
     const char* template = "mov rax, 60\n"
                            "mov rdi, %s\n" 
                            "syscall\n";
-    arg = args->size ? args->items[0]->token->value : NULL;
+    const char* var_call = "[%s]";
+
+    arg = curr_node->size ? curr_node->items[0]->token->value : NULL;
+
+    if (!isdigit(arg[0])) {
+      arg = calloc(strlen(var_call) + 128, sizeof(char));
+      sprintf(arg, var_call, curr_node->items[0]->token->value);
+    }
 
     char* tmp_s = calloc(strlen(template) + 128, sizeof(char));
     sprintf(tmp_s, template, arg);

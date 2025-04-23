@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     parser_advance(parser);
   }
 
-  char* asm_file = asm_root(root);
-  printf("%s\n", asm_file);
+  char* s_asm = asm_root(root);
+  write_file("test.out", s_asm);
  
   /*
   lexer_T* lexer = init_lexer(src);
@@ -33,6 +33,6 @@ int main(int argc, char *argv[])
   */
 
   free(src);
-  free(asm_file);
+  free(s_asm);
   return 0;
 }

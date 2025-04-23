@@ -2,6 +2,8 @@ exec = a.out
 sources = $(wildcard src/*.c)
 objects = $(sources:.c=.o)
 flags = -g -Wall -lm -ldl -fPIC -rdynamic
+asm_flags = -f elf64
+asm_exec = test.o
 
 $(exec): $(objects)
 	gcc $(objects) $(flags) -o $(exec)
@@ -9,7 +11,12 @@ $(exec): $(objects)
 %.o: %.c include/%.h
 	gcc -c $(flags) $< -o $@
 
-clean:
+asm:
+	nasm test.out $(asm_flags)
+	ld test.o -o b.out
+	rm test.o
+	
+cl:
 	-rm *.out
 	-rm *.o
 	-rm *.a
@@ -17,5 +24,3 @@ clean:
 	-rm examples/*.o
 	-rm examples/*.out
 
-lint:
-	clang-tidy src/*.c src/include/*.h
